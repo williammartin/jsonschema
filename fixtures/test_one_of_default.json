@@ -1,0 +1,65 @@
+{
+  "oneOf": [
+    {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "$ref": "#/definitions/Tester"
+    },
+    {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "$ref": "#/definitions/Developer"
+    }
+  ],
+  "definitions": {
+    "Developer": {
+      "required": [
+        "experience",
+        "language"
+      ],
+      "properties": {
+        "experience": {
+          "minLength": 1,
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "language": {
+          "pattern": "\\S+",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "Tester": {
+      "required": [
+        "experience"
+      ],
+      "properties": {
+        "experience": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    }
+  }
+}
