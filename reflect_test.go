@@ -110,7 +110,6 @@ func TestSchemaGeneration(t *testing.T) {
 	}
 }
 
-// TestUserOneOf struct
 type TestUserOneOf struct {
 	Tester    Tester    `json:"tester" jsonschema:"required"`
 	Developer Developer `json:"developer" jsonschema:"required"`

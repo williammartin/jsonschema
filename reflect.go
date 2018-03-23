@@ -288,7 +288,7 @@ func (r *Reflector) reflectStructFields(st *Type, definitions Definitions, t ref
 			st.Required = append(st.Required, name)
 		}
 
-		// return anyOf realization for structures.
+		// return oneOf realization for structures.
 		if t.Implements(oneOfType) {
 			oneOfList := make([]*Type, 0)
 			for _, oneType := range reflect.New(t).Interface().(oneOf).OneOf() {
