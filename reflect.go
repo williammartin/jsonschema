@@ -210,7 +210,7 @@ var ifThenElseType = reflect.TypeOf((*ifThenElse)(nil)).Elem()
 func (r *Reflector) reflectTypeToSchema(definitions Definitions, t reflect.Type) (schema *Type) {
 	// Already added to definitions?
 	if _, ok := definitions[t.Name()]; ok {
-		return &Type{Ref: "#/definitions/" + t.Name()}
+		return &Type{Ref: "#/definitions/" + t.PkgPath() + "." +t.Name()}
 	}
 
 	// jsonpb will marshal protobuf enum options as either strings or integers.
@@ -337,7 +337,7 @@ func (r *Reflector) reflectStruct(definitions Definitions, t reflect.Type) *Type
 
 	return &Type{
 		Version: Version,
-		Ref:     "#/definitions/" + t.String(),
+		Ref:     "#/definitions/" + t.PkgPath() + "." + t.Name(),
 	}
 }
 
