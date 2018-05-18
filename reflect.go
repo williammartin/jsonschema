@@ -328,7 +328,7 @@ func (r *Reflector) reflectStruct(definitions Definitions, t reflect.Type) *Type
 	if r.AllowAdditionalProperties {
 		st.AdditionalProperties = []byte("true")
 	}
-	definitions[t.Name()] = st
+	definitions[t.String()] = st
 	r.reflectStructFields(st, definitions, t)
 	if t.Implements(ifThenElseType) {
 		condition := reflect.New(t).Interface().(ifThenElse).IfThenElse()
@@ -337,7 +337,7 @@ func (r *Reflector) reflectStruct(definitions Definitions, t reflect.Type) *Type
 
 	return &Type{
 		Version: Version,
-		Ref:     "#/definitions/" + t.Name(),
+		Ref:     "#/definitions/" + t.String(),
 	}
 }
 
@@ -634,7 +634,6 @@ func (r *Reflector) getOneOfList(definitions Definitions, s []reflect.StructFiel
 			oneOfList = append(oneOfList, r.reflectTypeToSchema(definitions, oneType.Type))
 		}
 	}
-
 	return oneOfList
 }
 
