@@ -328,7 +328,7 @@ func (r *Reflector) reflectStruct(definitions Definitions, t reflect.Type) *Type
 	if r.AllowAdditionalProperties {
 		st.AdditionalProperties = []byte("true")
 	}
-	definitions[t.String()] = st
+	definitions[t.PkgPath() + "." + t.Name()] = st
 	r.reflectStructFields(st, definitions, t)
 	if t.Implements(ifThenElseType) {
 		condition := reflect.New(t).Interface().(ifThenElse).IfThenElse()
