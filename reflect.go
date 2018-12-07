@@ -209,11 +209,21 @@ type schemaCase interface {
 	Case() SchemaSwitch
 }
 
+type minItems interface {
+	MinItems() int
+}
+
+type maxItems interface {
+	MaxItems() int
+}
+
 var protoEnumType = reflect.TypeOf((*protoEnum)(nil)).Elem()
 var andOneOfType = reflect.TypeOf((*andOneOf)(nil)).Elem()
 var oneOfType = reflect.TypeOf((*oneOf)(nil)).Elem()
 var ifThenElseType = reflect.TypeOf((*ifThenElse)(nil)).Elem()
 var schemaCaseType = reflect.TypeOf((*schemaCase)(nil)).Elem()
+var minItemsType = reflect.TypeOf((*minItems)(nil)).Elem()
+var maxItemsType = reflect.TypeOf((*maxItems)(nil)).Elem()
 
 func (r *Reflector) reflectTypeToSchema(definitions Definitions, t reflect.Type) (schema *Type) {
 	// Already added to definitions?
@@ -289,6 +299,13 @@ func (r *Reflector) reflectTypeToSchema(definitions Definitions, t reflect.Type)
 		if t.Kind() == reflect.Array {
 			returnType.MinItems = t.Len()
 			returnType.MaxItems = returnType.MinItems
+		}
+
+		if t.Kind() == reflect.Slice && t != byteSliceType && t.Implements(minItemsType) {
+			returnType.MinItems = reflect.New(t).Interface().(minItems).MinItems()
+		}
+		if t.Kind() == reflect.Slice && t != byteSliceType && t.Implements(maxItemsType) {
+			returnType.MaxItems = reflect.New(t).Interface().(maxItems).MaxItems()
 		}
 		switch t {
 		case byteSliceType:
