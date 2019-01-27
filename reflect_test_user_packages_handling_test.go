@@ -3,8 +3,8 @@ package jsonschema
 import (
 	"reflect"
 
-	"github.com/discovery-digital/jsonschema/v1"
-	"github.com/discovery-digital/jsonschema/v2"
+	"github.com/williammartin/jsonschema/v1"
+	"github.com/williammartin/jsonschema/v2"
 )
 
 type TestUserPackage struct {
