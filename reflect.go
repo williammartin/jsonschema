@@ -404,6 +404,8 @@ func (r *Reflector) reflectStructFields(st *Type, definitions Definitions, t ref
 	if t.Kind() == reflect.Ptr {
 		t = t.Elem()
 	}
+
+	oneOfs := []reflect.StructField{}
 	for i := 0; i < t.NumField(); i++ {
 		f := t.Field(i)
 		// anonymous and exported type should be processed recursively
@@ -418,13 +420,22 @@ func (r *Reflector) reflectStructFields(st *Type, definitions Definitions, t ref
 			continue
 		}
 		property := r.reflectTypeToSchema(definitions, f.Type)
-		property.structKeywordsFromTags(r.getJSONSchemaTags(f, t))
+		schemaTags := r.getJSONSchemaTags(f, t)
+		property.structKeywordsFromTags(schemaTags)
 		st.Properties[name] = property
 		if required {
 			st.Required = append(st.Required, name)
 		}
 
+		for _, tag := range schemaTags {
+			if tag == "oneOf" {
+				oneOfs = append(oneOfs, f)
+			}
+		}
 	}
+
+	st.OneOf = r.getOneOfList(definitions, oneOfs)
+
 	// Append oneOf array to existing object type when AndOneOf() is implemented
 	if t.Implements(andOneOfType) {
 		s := reflect.New(t).Interface().(andOneOf).AndOneOf()
